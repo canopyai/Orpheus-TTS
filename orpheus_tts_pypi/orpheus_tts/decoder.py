@@ -4,11 +4,12 @@ import torch
 import asyncio
 import threading
 import queue
+import os
 
 
 model = SNAC.from_pretrained("hubertsiuzdak/snac_24khz").eval()
 
-snac_device = "cuda"
+snac_device = os.environ.get("SNAC_DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(snac_device)
 
 
