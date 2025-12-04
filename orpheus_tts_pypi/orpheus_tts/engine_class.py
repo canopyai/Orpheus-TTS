@@ -8,9 +8,12 @@ import queue
 from .decoder import tokens_decoder_sync
 
 class OrpheusModel:
-    def __init__(self, model_name, dtype=torch.bfloat16, tokenizer='canopylabs/orpheus-3b-0.1-pretrained', **engine_kwargs):
+    def __init__(self, model_name, dtype=torch.bfloat16, tokenizer='canopylabs/orpheus-3b-0.1-pretrained',
+                 max_model_len=2048, gpu_memory_utilization=0.95, **engine_kwargs):
         self.model_name = self._map_model_params(model_name)
         self.dtype = dtype
+        self.max_model_len = max_model_len
+        self.gpu_memory_utilization = gpu_memory_utilization
         self.engine_kwargs = engine_kwargs  # vLLM engine kwargs
         self.engine = self._setup_engine()
         self.available_voices = ["zoe", "zac","jess", "leo", "mia", "julia", "leah"]
@@ -59,6 +62,8 @@ class OrpheusModel:
         engine_args = AsyncEngineArgs(
             model=self.model_name,
             dtype=self.dtype,
+            max_model_len=self.max_model_len,
+            gpu_memory_utilization=self.gpu_memory_utilization,
             **self.engine_kwargs
         )
         
