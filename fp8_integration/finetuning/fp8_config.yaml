@@ -1,0 +1,82 @@
+# FP8 Finetuning Configuration for Orpheus-TTS
+
+# Model configuration
+model_name: "canopylabs/orpheus-3b-0.1-ft"
+tokenizer_name: null  # Uses model_name if null
+
+# Output configuration
+output_dir: "./orpheus-3b-fp8-finetuned"
+
+# Training hyperparameters
+num_train_epochs: 3
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-5
+warmup_ratio: 0.1
+weight_decay: 0.01
+max_grad_norm: 1.0
+
+# FP8 specific configuration
+fp8_format: "HYBRID"  # Options: HYBRID (E4M3 forward, E5M2 backward), E4M3, E5M2
+fp8_amax_history_len: 16  # Size of history window for delayed scaling
+fp8_amax_compute_algo: "max"  # Options: max, most_recent
+fp8_use_delayed_scaling: true  # Use delayed scaling for better performance
+
+# FlashAttention configuration
+use_flash_attn: true  # Use FlashAttention-3 if available
+flash_attn_fp8: true  # Enable FP8 support in FlashAttention-3
+
+# Dataset configuration
+dataset_name: "canopylabs/orpheus_tts_dataset"
+max_seq_length: 2048
+
+# Logging and checkpointing
+logging_steps: 10
+save_steps: 500
+save_total_limit: 2
+report_to: "wandb"  # Options: wandb, tensorboard, none
+project_name: "orpheus-fp8-finetuning"
+run_name: "fp8-finetune-experiment"
+
+# Advanced FP8 options
+fp8_margin: 0  # Margin for amax computation
+fp8_interval: 1  # Interval for amax update
+fp8_use_prev_grad_scale: true  # Use previous gradient scale for stability
+fp8_wgrad: true  # Apply FP8 to weight gradients
+
+# Memory optimization
+gradient_checkpointing: false  # Enable if running out of memory
+cpu_offload: false  # Offload optimizer states to CPU
+
+# Evaluation
+eval_steps: 100
+evaluation_strategy: "steps"
+greater_is_better: false
+metric_for_best_model: "eval_loss"
+load_best_model_at_end: true
+
+# Data loading
+dataloader_num_workers: 4
+dataloader_pin_memory: true
+dataloader_drop_last: true
+
+# Mixed precision training
+fp16: false  # Don't use FP16 with FP8
+bf16: true   # BF16 for non-quantized operations
+tf32: true   # Enable TF32 on Ampere+
+
+# Distributed training
+ddp_find_unused_parameters: false
+ddp_bucket_cap_mb: 25
+ddp_broadcast_buffers: false
+
+# Optimizer
+optim: "adamw_torch"  # Use PyTorch AdamW
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_epsilon: 1.0e-8
+
+# Scheduler
+lr_scheduler_type: "cosine"
+lr_scheduler_kwargs:
+  num_cycles: 0.5
