@@ -1,0 +1,53 @@
+# FSDP2 + LoRA Configuration for Orpheus TTS
+
+# Model and Dataset
+model_name: "canopylabs/orpheus-tts-0.1-pretrained"
+dataset_path: "<PATH_TO_YOUR_DATASET>" # IMPORTANT: Update with your dataset path
+max_length: 8192 # Max sequence length for tokenizer and dataloader
+
+# Training Parameters
+seed: 42
+num_epochs: 3
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 2
+learning_rate: 1.0e-4
+adam_beta1: 0.9
+adam_beta2: 0.999
+weight_decay: 0.01
+warmup_ratio: 0.1
+max_grad_norm: 1.0
+use_mixed_precision: true
+
+# FSDP2 Parameters
+sharding_strategy: "FULL_SHARD" # Options: FULL_SHARD, SHARD_GRAD_OP, HYBRID_SHARD, NO_SHARD
+cpu_offload: false # Set to true if you have limited GPU memory
+use_orig_params: true # Required for LoRA compatibility
+activation_checkpointing: true # Enable activation checkpointing
+
+# LoRA (Parameter-Efficient Fine-Tuning) Parameters
+lora_r: 32
+lora_alpha: 64
+lora_dropout: 0.05
+target_modules:
+  - "q_proj"
+  - "k_proj"
+  - "v_proj"
+  - "o_proj"
+  - "gate_proj"
+  - "down_proj"
+  - "up_proj"
+modules_to_save:
+  - "lm_head"
+  - "embed_tokens"
+use_rslora: true
+
+# Logging and Saving
+use_wandb: true
+project_name: "orpheus-fsdp2-lora"
+run_name: "fsdp2-lora-run-1"
+output_dir: "checkpoints/fsdp2-lora"
+logging_steps: 10
+save_epochs: 1
+
+# Dataloader
+num_workers: 4

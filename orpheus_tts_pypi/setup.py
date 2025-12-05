@@ -5,7 +5,7 @@ setup(
     name="orpheus-speech",
     version="0.1.0",
     packages=find_packages(),
-    install_requires=["snac", "vllm"],
+    install_requires=["snac", "vllm", "requests"],
     author="Amu Varma",
     author_email="amu@canopylabs.com",
     description="Orpheus Text-to-Speech System",
