@@ -1,0 +1,55 @@
+{
+  "name": "orpheus-speech",
+  "version": "0.0.1",
+  "description": "TTS Towards Human-Sounding Speech",
+  "type": "module",
+  "main": "./src/orpheus.ts",
+  "types": "./types/orpheus.d.ts",
+  "exports": {
+    "types": "./types/orpheus.d.ts",
+    "node": {
+      "import": "./dist/orpheus.node.mjs",
+      "require": "./dist/orpheus.node.cjs"
+    },
+    "default": "./dist/orpheus.js"
+  },
+  "scripts": {
+    "build": "node ./build.js && tsc",
+    "format": "prettier --write . --print-width 100"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canopyai/orpheus-tts.git"
+  },
+  "keywords": [
+    "text-to-speech",
+    "tts",
+    "speech synthesis"
+  ],
+  "author": "Xenova",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/canopyai/orpheus-tts/issues"
+  },
+  "homepage": "https://github.com/canopyai/orpheus-tts#readme",
+  "dependencies": {
+    "@huggingface/transformers": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/audioworklet": "^0.0.72",
+    "esbuild": "0.25.2",
+    "prettier": "3.4.2",
+    "typescript": "^5.8.2"
+  },
+  "files": [
+    "types",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "jsdelivr": "./dist/orpheus.js",
+  "unpkg": "./dist/orpheus.js"
+}
